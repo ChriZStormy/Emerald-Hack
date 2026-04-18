@@ -31,7 +31,7 @@ def main():
     nivel_1 = os.path.dirname(ruta_script) # Estás en notifications/email/
     nivel_2 = os.path.dirname(nivel_1)      # Estás en notifications/
     ruta_raiz = os.path.dirname(nivel_2)
-    db_path = os.path.join(ruta_raiz, "BD.db")
+    db_path = os.path.join(ruta_raiz, "DB.db")
 
     destinations = [
         EmailDestination(),
@@ -42,8 +42,8 @@ def main():
     try:
         with sqlite3.connect(db_path) as conn:
             cursor = conn.cursor()
-            # Seleccionamos tus columnas reales
-            cursor.execute("SELECT Id_Usuario, nombre, correo FROM Usuario")
+            # Seleccionamos las columnas reales, agregando la nueva (que en la base se llama 'Numero') para evitar posibles problemas de estructura
+            cursor.execute("SELECT Id_Usuario, nombre, correo, Numero FROM Usuario")
             usuarios = cursor.fetchall()
     except Exception as e:
         logger.error(f"Error al leer la BD: {e}")
@@ -51,7 +51,8 @@ def main():
 
     # Procesar la información
     for row in usuarios:
-        user_id, nombre, correo = row
+        # Desempaquetamos incluyendo 'telefono' (que asignamos a '_' porque no se usará)
+        user_id, nombre, correo, _ = row
         
         # Ajustamos el diccionario a lo que tu tabla tiene ahora
         user_config = {

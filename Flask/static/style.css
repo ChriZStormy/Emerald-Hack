@@ -1,0 +1,156 @@
+/* 1. CONFIGURACIÓN Y VARIABLES EMERALD */
+:root {
+    --bg-dark: #0a0a0a;          
+    --card-bg: #141414;          
+    --emerald: #00FF7F;          
+    --text-main: #ffffff;
+    --text-muted: #d0d0d0; /* ACLARADO: De #a0a0a0 a #d0d0d0 para mejor lectura */
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    min-height: 100vh;
+}
+
+/* 2. HEADER FIJO */
+.sector-header {
+    background-color: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 20px 0;
+    border-bottom: 1px solid #222;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.btn-sector {
+    text-decoration: none;
+    color: var(--emerald);
+    border: 1px solid var(--emerald);
+    padding: 8px 18px;
+    margin: 0 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.btn-sector:hover {
+    background-color: var(--emerald);
+    color: var(--bg-dark);
+    box-shadow: 0 0 15px var(--emerald);
+}
+
+/* 3. SECCIÓN CENTRAL (HERO) */
+.hero-container {
+    padding: 160px 20px 80px 20px; /* MÁS ESPACIO ARRIBA por la navbar fija */
+    text-align: center;
+}
+
+.main-title {
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    font-weight: 800;
+    margin-bottom: 5px;
+    letter-spacing: -2px;
+}
+
+.sub-title {
+    color: var(--emerald);
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    font-size: 1rem;
+    margin-bottom: 40px; /* MÁS ESPACIO debajo del subtítulo */
+}
+
+/* 4. BOTONES DE ACCIÓN (Facebook y Registro) */
+.social-area {
+    margin-top: 50px; /* BAJA EL LINK DE FACEBOOK */
+    margin-bottom: 30px;
+}
+
+.btn-facebook-link {
+    text-decoration: none;
+    color: #1877F2;
+    font-weight: 600;
+    font-size: 1.1rem;
+    display: inline-flex;
+    align-items: center;
+    transition: 0.3s;
+}
+
+.btn-facebook-link:hover {
+    filter: brightness(1.3);
+}
+
+.login-trigger-area {
+    margin-top: 40px; /* MÁS ESPACIO para que no se pegue al link de FB */
+}
+
+/* 5. DASHBOARD Y SECCIONES */
+.dashboard-section {
+    padding: 100px 20px;
+    border-top: 1px solid #222;
+}
+
+/* MEJORA DEL FORMULARIO DE REGISTRO */
+.registration-area {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    background: radial-gradient(circle at center, #111 0%, #0a0a0a 100%);
+}
+
+.registration-card {
+    background-color: #111 !important;
+    padding: 50px;
+    border-radius: 20px;
+    border: 1px solid rgba(0, 255, 127, 0.2) !important; /* Borde neón sutil */
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 15px rgba(0, 255, 127, 0.05);
+    transition: transform 0.3s ease;
+}
+
+/* Estilo moderno para los campos de texto */
+.form-control {
+    background-color: #000 !important;
+    border: 1px solid #333 !important;
+    border-radius: 12px !important;
+    padding: 12px 18px !important;
+    color: white !important;
+    transition: all 0.3s ease !important;
+}
+
+.form-control:focus {
+    border-color: var(--emerald) !important;
+    box-shadow: 0 0 10px rgba(0, 255, 127, 0.2) !important;
+    background-color: #050505 !important;
+}
+
+/* Etiquetas minimalistas */
+.form-label {
+    color: var(--emerald) !important;
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px !important;
+}
+
+.hidden-section {
+    display: none !important;
+}

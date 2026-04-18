@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Expediente Digital</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+        <h2>Registro</h2>
+
+        <input id="nombre" placeholder="Nombre">
+        <input id="curp" placeholder="CURP">
+
+        <button onclick="enviar()">Registrar</button>
+
+        <p id="msg"></p>
+    </div>
+
+    <script>
+    function enviar() {
+        fetch('/api/registro', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                nombre: document.getElementById("nombre").value,
+                curp: document.getElementById("curp").value
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById("msg").innerText = data.mensaje;
+        });
+    }
+    </script>
+
+</body>
+</html>

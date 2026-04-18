@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mini Chatbot</title>
+</head>
+<body>
+
+    <h2>Expediente de {{ usuario.nombre }}</h2>
+
+    <p>CURP: {{ usuario.curp }}</p>
+
+    <h3>Trámites</h3>
+    <ul id="lista">
+        {% for t in usuario.tramites %}
+            <li>{{ t }}</li>
+        {% endfor %}
+    </ul>
+
+    <select id="tramite">
+        <option value="Licencia">Licencia</option>
+        <option value="INE">INE</option>
+        <option value="Acta de nacimiento">Acta de nacimiento</option>
+        <option value="CURP">CURP</option>
+    </select>   
+    <button onclick="agregar()">Agregar</button>
+
+    <script>
+    function agregar() {
+        fetch('/tramite', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                curp: "{{ usuario.curp }}",
+                tramite: document.getElementById("tramite").value
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            location.reload();
+        });
+    }
+    </script>
+
+<a href="/usuarios">Volver</a>
+
+</body>
+</html>

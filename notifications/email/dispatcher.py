@@ -118,7 +118,7 @@ class NotificationDispatcher:
         """Inyectar dependencias de los destinos evita acomplamiento rígido."""
         self.destinations = destinations
 
-    def process_request(self, user_config: Dict[str, Any]) -> None:
+    def process_request(self, user_config: Dict[str, Any], custom_content: Dict[str, Any] = None) -> None:
         """
         Flujo principal Orquestador:
         1. Recibe la configuración del usuario (dict/json object).
@@ -133,8 +133,11 @@ class NotificationDispatcher:
             return
 
         try:
-            # 2. Consultar servicios de Data
-            content = fetch_mock_data(nombre)
+            # 2. Consultar servicios de Data o usar custom_content
+            if custom_content:
+                content = custom_content
+            else:
+                content = fetch_mock_data(nombre)
             
             # 3. Invocar la comunicación por cada destino aplicable
             for dest in self.destinations:

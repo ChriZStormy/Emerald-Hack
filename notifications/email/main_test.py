@@ -20,35 +20,48 @@ logging.basicConfig(
 )
 logger = logging.getLogger("MainTest")
 
-def main():
-    logger.info("Iniciando prueba del Dispatcher (desde carpeta notifications)...")
+import sqlite3
 
-    # 1. Objeto JSON simulado
-    user_json = """
-    {
-        "email": "roberleonlan@gmail.com",
-        "frecuencia": "semanal",
-        "flags": ["competencia", "tendencias"]
-    }
-    """
-    
-    try:
-        user_config = json.loads(user_json)
-    except json.JSONDecodeError as err:
-        logger.error(f"El JSON del usuario vino mal formado: {err}")
-        return
+def main():
+    logger.info("Iniciando conexión...")
+
+    # CONFIGURACIÓN DEL PATH: 
+    # Ajusta cuántos os.path.dirname necesites para llegar a la carpeta de la BD
+    ruta_script = os.path.abspath(__file__)
+    nivel_1 = os.path.dirname(ruta_script) # Estás en notifications/email/
+    nivel_2 = os.path.dirname(nivel_1)      # Estás en notifications/
+    ruta_raiz = os.path.dirname(nivel_2)
+    db_path = os.path.join(ruta_raiz, "BD.db")
 
     destinations = [
         EmailDestination(),
         InstagramDestination() 
     ]
-    
     dispatcher = NotificationDispatcher(destinations=destinations)
 
-    logger.info("=== EMPEZANDO A PROCESAR EL USER CONFIG ===")
-    dispatcher.process_request(user_config)
-    logger.info("=== EJECUCIÓN FINALIZADA ===")
+    try:
+        with sqlite3.connect(db_path) as conn:
+            cursor = conn.cursor()
+            # Seleccionamos tus columnas reales
+            cursor.execute("SELECT Id_Usuario, nombre, correo FROM Usuario")
+            usuarios = cursor.fetchall()
+    except Exception as e:
+        logger.error(f"Error al leer la BD: {e}")
+        return
 
+    # Procesar la información
+    for row in usuarios:
+        user_id, nombre, correo = row
+        
+        # Ajustamos el diccionario a lo que tu tabla tiene ahora
+        user_config = {
+            "id": user_id,
+            "nombre": nombre,
+            "email": correo, # Aquí mapeamos 'correo' a la llave 'email' que espera tu dispatcher
+        }
+        
+        logger.info(f"Enviando notificación a: {nombre} ({correo})")
+        dispatcher.process_request(user_config)
 
 if __name__ == "__main__":
     main()

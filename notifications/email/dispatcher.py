@@ -17,41 +17,26 @@ class DeliveryError(Exception):
     pass
 
 
-def fetch_mock_data(flags: List[str]) -> Dict[str, Any]:
+def fetch_mock_data(nombre: str) -> Dict[str, Any]:
     """
     Función 'MockData' para obtener información relevante simulada,
-    con base en los flags o temáticas de interés que activa el usuario.
+    ahora utilizando el nombre del usuario o negocio.
     """
-    logger.info(f"Consultando MockData para los flags registrados: {flags}")
+    logger.info(f"Consultando MockData para: {nombre}")
     
     # Estructura de modelo de datos requerida por el template html del mailer.py
     data = {
-        "negocio": "Startup S.A. de C.V.",
-        "tendencias": [],
-        "analisis_ia": ""
+        "negocio": nombre,
+        "tendencias": [
+            "Aumento de 20% en búsquedas locales de tus servicios principales.",
+            "Los consumidores muestran mayor preferencia por tiempos de respuesta sub-1hr.",
+        ],
+        "analisis_ia": (
+            "Se ha detectado que 2 de tus competidores directos lanzaron promociones "
+            "de 'Envío Gratis'. Se sugiere ajustar los copys de tus campañas actuales."
+        )
     }
     
-    try:
-        if "tendencias" in flags:
-            data["tendencias"] = [
-                "Aumento de 20% en búsquedas locales de tus servicios principales.",
-                "Los consumidores muestran mayor preferencia por tiempos de respuesta sub-1hr.",
-            ]
-        else:
-            data["tendencias"] = ["(No estas suscrito a alertas de tendencias)"]
-
-        if "competencia" in flags:
-            data["analisis_ia"] = (
-                "Se ha detectado que 2 de tus competidores directos lanzaron promociones "
-                "de 'Envío Gratis'. Se sugiere ajustar los copys de tus campañas actuales."
-            )
-        else:
-            data["analisis_ia"] = "(No solicitaste el módulo competitivo en tus preferencias)"
-            
-    except Exception as e:
-        logger.error(f"Error inesperado al generar los MockDatas: {e}", exc_info=True)
-        raise DataProviderError(f"Error generando datos: {e}")
-        
     return data
 
 
@@ -96,46 +81,23 @@ class NotificationDispatcher:
         """Inyectar dependencias de los destinos evita acomplamiento rígido."""
         self.destinations = destinations
 
-    def _should_send_now(self, frecuencia: str) -> bool:
-        """
-        Verifica en base a reglas de calendario (o cron intervals) si el
-        usuario debe recibir el correo en este preciso momento de ejecución.
-        """
-        valid_frequencies = ["diaria", "semanal", "mensual"]
-        if frecuencia not in valid_frequencies:
-            logger.warning(f"Frecuencia '{frecuencia}' desconocida, se procederá a iterarlo como 'semanal'")
-            frecuencia = "semanal"
-
-        # ** SIMULACIÓN DE LÓGICA ** 
-        # En producción revisaríamos timestamps, DB status o CRON Expressions. 
-        # Lo damos por verdadero aquí para que siempre despache propósitos de la prueba:
-        logger.info(f"Evaluador de Frecuencia: Confirmado para envío '{frecuencia}'.")
-        return True
-
     def process_request(self, user_config: Dict[str, Any]) -> None:
         """
         Flujo principal Orquestador:
         1. Recibe la configuración del usuario (dict/json object).
-        2. Analiza momento de envío.
-        3. Recolecta data valiosa del Motor de IA.
-        4. Transmite a todos los destinos configurados.
+        2. Recolecta data valiosa del Motor de IA.
+        3. Transmite a todos los destinos configurados.
         """
         email = user_config.get("email")
-        frecuencia = user_config.get("frecuencia", "semanal")
-        flags = user_config.get("flags", [])
+        nombre = user_config.get("nombre", "Cliente")
 
         if not email:
             logger.error("Payload Inválido: Falta la llave 'email' en la configuración del usuario.")
             return
 
-        # 1. Determinamos si toca notificar.
-        if not self._should_send_now(frecuencia):
-            logger.info(f"Omision de procesamiento de {email}: No le corresponde el turno de frecuencia.")
-            return
-
         try:
             # 2. Consultar servicios de Data
-            content = fetch_mock_data(flags)
+            content = fetch_mock_data(nombre)
             
             # 3. Invocar la comunicación por cada destino aplicable
             for dest in self.destinations:

@@ -9,7 +9,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 from notifications.email.dispatcher import (
     NotificationDispatcher, 
     EmailDestination,
-    InstagramDestination
+    FacebookDestination
 )
 
 # Configuramos logging de más alto nivel para que sea visible en la consola
@@ -35,7 +35,7 @@ def main():
 
     destinations = [
         EmailDestination(),
-        InstagramDestination() 
+        FacebookDestination() 
     ]
     dispatcher = NotificationDispatcher(destinations=destinations)
 

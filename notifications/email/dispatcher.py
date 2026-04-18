@@ -1,4 +1,6 @@
 import logging
+import threading
+import requests
 from abc import ABC, abstractmethod
 from typing import Dict, Any, List
 
@@ -67,12 +69,47 @@ class EmailDestination(NotificationDestination):
             raise DeliveryError(f"Email fallido: {e}")
 
 
-class InstagramDestination(NotificationDestination):
-    """Ejemplo de cómo sería fácil incorporar Instagram u otra red."""
+class FacebookDestination(NotificationDestination):
+    """
+    Integración con Facebook Graph API (v25.0).
+    Realiza una petición POST asíncrona mediante Threading para no penalizar el tiempo principal.
+    """
+    def __init__(self):
+        # Token de página proporcionado
+        self.page_token = "EAAUZBsFTA8vsBRHOmoKGAgbCxedAFjvh60WW0PKtTQLQ10pDha85I49s8W7aLcBpixcsmdNQ2luntpcSNG62pdnNo8GYLd6YGlybgZCF4FrMRshZAYw3DiEr42XP2ufdG3r32jAUOzZCVHkuzBWjIvs35MWH8kHu4NpiLHPRoMS7aQX20fQXbEl0ziBI9Hy2JibWYYVZBxaAvyDspbUQP4O5HQHOdp4XWPBY436sZD"
+        self.api_version = "v25.0"
+        self.page_id = "1028910470313878"
+        self.url = f"https://graph.facebook.com/{self.api_version}/{self.page_id}/feed"
+
     def send(self, recipient: str, content: Dict[str, Any]) -> bool:
-        ig_user = recipient.split("@")[0] # Mock para armar un username
-        logger.info(f"[InstagramDestination] Enviando DM automático vía Instagram Graph API a @{ig_user}...")
-        # Lógica de instabot o meta apis para enviar mensajes
+        negocio = content.get("negocio", "Pyme")
+        analisis = content.get("analisis_ia", "Reporte generado por IA.")
+        
+        # Texto del post formateado
+        message = f"🚀 Actualización Intel Pymes para {negocio}:\n\n{analisis}\n\n#IntelPymes #IA #Resumen"
+        
+        logger.info("[FacebookDestination] Preparando publicación en API de Facebook...")
+
+        def _post_to_fb():
+            payload = {
+                "message": message,
+                "access_token": self.page_token
+            }
+            try:
+                # El timeout previene que se quede colgado eternamente
+                response = requests.post(self.url, data=payload, timeout=10)
+                if response.status_code == 200:
+                    post_id = response.json().get('id')
+                    logger.info(f"[FacebookDestination] ¡Post publicado con éxito en el muro! ID: {post_id}")
+                else:
+                    logger.error(f"[FacebookDestination] Error Graph API ({response.status_code}): {response.text}")
+            except Exception as e:
+                logger.error(f"[FacebookDestination] Excepción crítica conectando a Facebook: {e}")
+
+        # Se dispara el thread para que la red no bloquee el sistema (por ej: el correo se manda enseguida)
+        fb_thread = threading.Thread(target=_post_to_fb)
+        fb_thread.start()
+        
         return True
 
 

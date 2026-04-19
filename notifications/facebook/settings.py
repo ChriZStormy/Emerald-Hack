@@ -3,5 +3,5 @@ Configuraciones genéricas para integraciones.
 """
 
 # Marcadores de posición para las configuraciones de la API de Facebook
-YOUR_PAGE_ID = "1234567890"  # Reemplazar con el ID de la página real
-YOUR_ACCESS_TOKEN = "EAAGm0PX..."  # Reemplazar con el token de acceso real
+YOUR_PAGE_ID = "1028910470313878"
+YOUR_ACCESS_TOKEN = "EAAUZBsFTA8vsBROtt8NC8DnQZBnR3z9EKOZBM1tzm3Ynv9tqOtTaC2HLBexn1aS3ZAv8RdgaiTt60rjpU4RJVX8SirHWPtmdUnz1ZBnwBN67dPDHxpuEGrGCKDyL2Cnt6xK5MbnvpesMvNLn4VIeQtsy3ZBBEORKwXW6Av3lyYlZCn9wNMFFALbIW8EAWQ6k1OFh1qkH8HCtm47t2o4zSms3TCFbu1jJ3QJ2KDbU4tp6XIZD"

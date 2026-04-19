@@ -69,16 +69,17 @@ class EmailDestination(NotificationDestination):
             raise DeliveryError(f"Email fallido: {e}")
 
 
+from notifications.facebook.settings import YOUR_PAGE_ID, YOUR_ACCESS_TOKEN
+
 class FacebookDestination(NotificationDestination):
     """
     Integración con Facebook Graph API (v25.0).
     Realiza una petición POST asíncrona mediante Threading para no penalizar el tiempo principal.
     """
     def __init__(self):
-        # Token de página proporcionado
-        self.page_token = "EAAUZBsFTA8vsBRHOmoKGAgbCxedAFjvh60WW0PKtTQLQ10pDha85I49s8W7aLcBpixcsmdNQ2luntpcSNG62pdnNo8GYLd6YGlybgZCF4FrMRshZAYw3DiEr42XP2ufdG3r32jAUOzZCVHkuzBWjIvs35MWH8kHu4NpiLHPRoMS7aQX20fQXbEl0ziBI9Hy2JibWYYVZBxaAvyDspbUQP4O5HQHOdp4XWPBY436sZD"
+        self.page_token = YOUR_ACCESS_TOKEN
         self.api_version = "v25.0"
-        self.page_id = "1028910470313878"
+        self.page_id = YOUR_PAGE_ID
         self.url = f"https://graph.facebook.com/{self.api_version}/{self.page_id}/feed"
 
     def send(self, recipient: str, content: Dict[str, Any]) -> bool:
@@ -102,7 +103,10 @@ class FacebookDestination(NotificationDestination):
                     post_id = response.json().get('id')
                     logger.info(f"[FacebookDestination] ¡Post publicado con éxito en el muro! ID: {post_id}")
                 else:
-                    logger.error(f"[FacebookDestination] Error Graph API ({response.status_code}): {response.text}")
+                    error_data = response.json()
+                    logger.error(f"[FacebookDestination] Error Graph API ({response.status_code}): {error_data}")
+                    if "error" in error_data and error_data["error"].get("code") == 190:
+                        logger.error("[FacebookDestination] CRÍTICO: El token de acceso a Facebook ha expirado o es inválido.")
             except Exception as e:
                 logger.error(f"[FacebookDestination] Excepción crítica conectando a Facebook: {e}")
 

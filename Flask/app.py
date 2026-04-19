@@ -16,11 +16,11 @@ from notifications.email.dispatcher import (
 app = Flask(__name__)
 
 # Configurar dispatcher
-destinations = [
-    EmailDestination(),
-    FacebookDestination() 
-]
-dispatcher = NotificationDispatcher(destinations=destinations)
+email_destinations = [EmailDestination()]
+fb_destinations = [FacebookDestination()]
+
+email_dispatcher = NotificationDispatcher(destinations=email_destinations)
+fb_dispatcher = NotificationDispatcher(destinations=fb_destinations)
 
 def conectar_db():
     # conectamos con la database del root
@@ -142,7 +142,17 @@ def simular():
             }
             
             print(f"Enviando reporte de Semana {idx + 1} a {nombre} ({correo})")
-            dispatcher.process_request(user_config, custom_content)
+            email_dispatcher.process_request(user_config, custom_content)
+            
+        # Post to Facebook once per simulation (not per user)
+        fb_config = {"nombre": "Comunidad Pymes Guanajuato", "email": "admin@facebook.page"}
+        fb_content = {
+            "negocio": "Pymes de Guanajuato",
+            "analisis_ia": f"¡Reporte semanal disponible! {alimenticio['prediccion']} - {alimenticio['insight']}"
+        }
+        print(f"Publicando reporte general de Semana {idx + 1} en Facebook...")
+        fb_dispatcher.process_request(fb_config, fb_content)
+        
     except Exception as e:
         print(f"Error en simulacion: {e}")
         
@@ -167,8 +177,6 @@ def registrar_usuario():
         conn.commit()
         conn.close()
 
-        subprocess.run(["python", "tu_script_secundario.py"])
-
         # Enviar notificación de bienvenida/reporte al usuario recién registrado
         user_config = {
             "id": user_id,
@@ -176,7 +184,7 @@ def registrar_usuario():
             "email": correo
         }
         print(f"Despachando notificaciones para el nuevo usuario {nombre}...")
-        dispatcher.process_request(user_config)
+        email_dispatcher.process_request(user_config)
         
     except Exception as e:
         print(f"Error: {e}")

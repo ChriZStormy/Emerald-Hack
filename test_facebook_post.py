@@ -1,11 +1,15 @@
 import requests
 import json
+import sys
+import os
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from notifications.facebook.settings import YOUR_PAGE_ID, YOUR_ACCESS_TOKEN
 
 def test_facebook_post():
-    # Page Token extraido programmaticamente del endpoint /me/accounts
-    page_token = "EAAUZBsFTA8vsBRHOmoKGAgbCxedAFjvh60WW0PKtTQLQ10pDha85I49s8W7aLcBpixcsmdNQ2luntpcSNG62pdnNo8GYLd6YGlybgZCF4FrMRshZAYw3DiEr42XP2ufdG3r32jAUOzZCVHkuzBWjIvs35MWH8kHu4NpiLHPRoMS7aQX20fQXbEl0ziBI9Hy2JibWYYVZBxaAvyDspbUQP4O5HQHOdp4XWPBY436sZD"
+    page_token = YOUR_ACCESS_TOKEN
     api_version = "v25.0"
-    page_id = "1028910470313878"
+    page_id = YOUR_PAGE_ID
     url = f"https://graph.facebook.com/{api_version}/{page_id}/feed"
     
     print("Iniciando prueba de publicacion generica a la pagina de Facebook Intel Pymes...")

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,19 +10,34 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        html { scroll-behavior: smooth; }
-        .dashboard-section { padding: 80px 0; border-bottom: 1px solid #222; }
-        .hidden-section { display: none; }
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .dashboard-section {
+            padding: 80px 0;
+            border-bottom: 1px solid #222;
+        }
+
+        .hidden-section {
+            display: none;
+        }
+
         /* Aumenté el espacio arriba y abajo del Hero */
-        .hero-container { padding-top: 180px; padding-bottom: 100px; } 
+        .hero-container {
+            padding-top: 180px;
+            padding-bottom: 100px;
+        }
+
         .btn-facebook-link {
-            text-decoration: none; 
-            color: #ffffff; 
-            font-weight: 600; 
-            display: inline-flex; 
+            text-decoration: none;
+            color: #ffffff;
+            font-weight: 600;
+            display: inline-flex;
             align-items: center;
             transition: color 0.3s ease;
         }
+
         .btn-facebook-link:hover {
             color: #00FF7F;
         }
@@ -30,18 +46,22 @@
         ::-webkit-scrollbar {
             width: 10px;
         }
+
         ::-webkit-scrollbar-track {
             background: #0a0a0a;
         }
+
         ::-webkit-scrollbar-thumb {
             background: #00FF7F;
             border-radius: 5px;
         }
+
         ::-webkit-scrollbar-thumb:hover {
             background: #00cc66;
         }
     </style>
 </head>
+
 <body style="background-color: #0a0a0a; color: white;">
 
     <header class="sector-header fixed-top w-100" style="background: rgba(10,10,10,0.9); backdrop-filter: blur(10px);">
@@ -50,15 +70,17 @@
             <a href="#turismo" class="btn-sector">Turismo Gto</a>
             <a href="#agro" class="btn-sector">Agroindustria</a>
             <form action="/simular" method="POST" style="display:inline; position:absolute; right:20px; top:15px;">
-                <button type="submit" style="background: none; border: 1px solid #444; color: #888; border-radius: 3px; font-size: 10px; padding: 2px 5px; cursor: pointer;" title="Simular paso de 1 semana">Simulación</button>
+                <button type="submit"
+                    style="background: none; border: 1px solid #444; color: #888; border-radius: 3px; font-size: 10px; padding: 2px 5px; cursor: pointer;"
+                    title="Simular paso de 1 semana">Simulación</button>
             </form>
         </div>
     </header>
 
     <main class="hero-container text-center">
-        <h1 class="main-title">Inteligencia de Mercado</h1>
-        <h2 class="sub-title" style="letter-spacing: 8px;">PyMEs Guanajuato</h2>
-        
+        <h1 class="main-title">PyMEX</h1>
+        <h2 class="sub-title" style="letter-spacing: 8px;">Inteligencia de Mercados</h2>
+
         <div style="margin-top: 70px;">
             <a href="https://www.facebook.com/profile.php?id=61569257250677" target="_blank" class="btn-facebook-link">
                 <i class="bi bi-facebook" style="font-size: 28px; margin-right: 12px; color: #00FF7F;"></i>
@@ -67,8 +89,10 @@
         </div>
 
         <div style="margin-top: 60px;">
-            <p class="text-muted mb-4" style="font-size: 1.1rem; letter-spacing: 1px;">¿Deseas reportes personalizados?</p>
-            <button onclick="mostrarRegistro()" class="btn-login" style="background: #00FF7F; color: black; border: none; padding: 18px 50px; border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 20px rgba(0, 255, 127, 0.3);">
+            <p class="mb-4" style="font-size: 1.1rem; letter-spacing: 1px; color: white; opacity: 0.7;">¿Deseas reportes
+                personalizados?</p>
+            <button onclick="mostrarRegistro()" class="btn-login"
+                style="background: #00FF7F; color: black; border: none; padding: 18px 50px; border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 20px rgba(0, 255, 127, 0.3);">
                 Registrarme ahora
             </button>
         </div>
@@ -80,25 +104,26 @@
                 <h2 class="emerald-text fw-bold" style="letter-spacing: -1px; font-size: 2.2rem;">Únete a la Red</h2>
                 <p class="text-muted">Acceso exclusivo a reportes estratégicos de Guanajuato</p>
             </div>
-            
+
             <form action="/registrar_usuario" method="POST">
                 <div class="mb-4">
                     <label class="form-label">Nombre</label>
                     <input type="text" name="nombre" class="form-control" placeholder="Nombre completo" required>
                 </div>
-                
+
                 <div class="mb-4">
                     <label class="form-label">Correo</label>
                     <input type="email" name="correo" class="form-control" placeholder="correo@empresa.com" required>
                 </div>
-                
+
                 <div class="mb-4">
                     <label class="form-label">Telefono</label>
                     <input type="tel" name="telefono" class="form-control" placeholder="+52 477 000 0000" required>
                 </div>
 
                 <div class="pt-3">
-                    <button type="submit" class="btn btn-success w-100 fw-bold" style="background: var(--emerald); color: black; border: none; padding: 16px; border-radius: 12px; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px;">
+                    <button type="submit" class="btn btn-success w-100 fw-bold"
+                        style="background: var(--emerald); color: black; border: none; padding: 16px; border-radius: 12px; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px;">
                         Confirmar Registro
                     </button>
                 </div>
@@ -113,9 +138,8 @@
             <div class="row align-items-center">
                 <div class="col-md-7">
                     <div class="registration-card" style="max-width: 100%; background-color: #141414;">
-                        <canvas id="chart-{{ id }}" 
-                                data-labels='{{ info.labels | tojson }}' 
-                                data-valores='{{ info.valores | tojson }}'></canvas>
+                        <canvas id="chart-{{ id }}" data-labels='{{ info.labels | tojson }}'
+                            data-valores='{{ info.valores | tojson }}'></canvas>
                     </div>
                 </div>
                 <div class="col-md-5">
@@ -123,9 +147,13 @@
                         <h5 class="text-info">Predicción de Mercado</h5>
                         <p class="fs-5">{{ info.prediccion }}</p>
                     </div>
-                    <div class="registration-card" style="max-width: 100%; border-left: 4px solid #00FF7F; background-color: #141414; padding: 25px; height: auto; overflow: visible;">
-                        <h5 class="emerald-text mb-3" style="font-weight: bold; font-size: 1.25rem;">💡 Recomendación IA</h5>
-                        <p style="color: #f0f0f0; font-size: 1.05rem; line-height: 1.6; white-space: pre-wrap; margin-bottom: 0;">{{ info.insight }}</p>
+                    <div class="registration-card"
+                        style="max-width: 100%; border-left: 4px solid #00FF7F; background-color: #141414; padding: 25px; height: auto; overflow: visible;">
+                        <h5 class="emerald-text mb-3" style="font-weight: bold; font-size: 1.25rem;">💡 Recomendación IA
+                        </h5>
+                        <p
+                            style="color: #f0f0f0; font-size: 1.05rem; line-height: 1.6; white-space: pre-wrap; margin-bottom: 0;">
+                            {{ info.insight }}</p>
                     </div>
                 </div>
             </div>
@@ -134,7 +162,7 @@
     </div>
 
     <footer class="text-center py-5 mt-5" style="border-top: 1px solid #222;">
-        <p class="text-muted">&copy; 2026 GTO Insight Pro - Ronaldo Arriaga</p>
+        <p class="text-muted" style="font-size: 1.1rem; letter-spacing: 1px; color: white; opacity: 0.7;">&copy; 2026 GTO Insight Pro - Pymex</p>
     </footer>
 
     <script>
@@ -144,13 +172,13 @@
             seccion.scrollIntoView({ behavior: 'smooth' });
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const charts = ['alimenticio', 'turismo', 'agro'];
             charts.forEach(id => {
                 const canvas = document.getElementById(`chart-${id}`);
                 const labels = JSON.parse(canvas.getAttribute('data-labels'));
                 const valores = JSON.parse(canvas.getAttribute('data-valores'));
-                
+
                 new Chart(canvas.getContext('2d'), {
                     type: 'line',
                     data: {
@@ -165,7 +193,7 @@
                             borderWidth: 3
                         }]
                     },
-                    options: { 
+                    options: {
                         responsive: true,
                         plugins: { legend: { display: false } },
                         scales: {
@@ -178,4 +206,5 @@
         });
     </script>
 </body>
+
 </html>
